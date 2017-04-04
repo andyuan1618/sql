@@ -1,0 +1,40 @@
+select t.branch '分公司'
+,case when c.calldate between '2016-1-4' and '2016-1-9' then '1-1'
+			when c.calldate between '2016-1-11' and '2016-1-15 23:59:59' then '1-2'
+			when c.calldate between '2016-1-18' and '2016-1-22 23:59:59' then '1-3'
+			when c.calldate between '2016-1-25' and '2016-1-29 23:59:59' then '1-4'
+			when c.calldate between '2016-2-15' and '2016-2-19 23:59:59' then '2-3'
+			when c.calldate between '2016-2-22' and '2016-2-26 23:59:59' then '2-4'
+			when c.calldate between '2016-2-29' and '2016-3-4 23:59:59' then '3-1'
+			when c.calldate between '2016-3-7' and '2016-3-11 23:59:59' then '3-2'
+			when c.calldate between '2016-3-14' and '2016-3-18 23:59:59' then '3-3'
+			when c.calldate between '2016-3-21' and '2016-3-25 23:59:59' then '3-4'
+			when c.calldate between '2016-3-28' and '2016-4-1 23:59:59' then '3-5'
+			when c.calldate between '2016-4-4' and '2016-4-8 23:59:59' then '4-1'
+			when c.calldate between '2016-4-11' and '2016-4-15 23:59:59' then '4-2'
+			when c.calldate between '2016-4-18' and '2016-4-22 23:59:59' then '4-3'
+		else '其他' end '周度'
+,isnull(sum(case when t.requireamount>0 then 1 else 0 end),0) '有需求客户数'
+,isnull(sum(case when t.requireamount >200 then 200 else t.requireamount end),0) '总需求额度'
+,case when isnull(sum(case when t.requireamount>0 then 1 else 0 end),0)=0 then 0 else isnull(sum(case when t.requireamount >200 then 200 else t.requireamount end),0) *1./isnull(sum(case when t.requireamount>0 then 1 else 0 end),0) end '平均需求额度'
+from dfss_bi..calldetails c
+left join dfss_bi..telemarketingdetail t
+on c.clt_code=t.clt_code
+where t.cltstatus <>1
+group by t.branch
+,case when c.calldate between '2016-1-4' and '2016-1-9' then '1-1'
+			when c.calldate between '2016-1-11' and '2016-1-15 23:59:59' then '1-2'
+			when c.calldate between '2016-1-18' and '2016-1-22 23:59:59' then '1-3'
+			when c.calldate between '2016-1-25' and '2016-1-29 23:59:59' then '1-4'
+			when c.calldate between '2016-2-15' and '2016-2-19 23:59:59' then '2-3'
+			when c.calldate between '2016-2-22' and '2016-2-26 23:59:59' then '2-4'
+			when c.calldate between '2016-2-29' and '2016-3-4 23:59:59' then '3-1'
+			when c.calldate between '2016-3-7' and '2016-3-11 23:59:59' then '3-2'
+			when c.calldate between '2016-3-14' and '2016-3-18 23:59:59' then '3-3'
+			when c.calldate between '2016-3-21' and '2016-3-25 23:59:59' then '3-4'
+			when c.calldate between '2016-3-28' and '2016-4-1 23:59:59' then '3-5'
+			when c.calldate between '2016-4-4' and '2016-4-8 23:59:59' then '4-1'
+			when c.calldate between '2016-4-11' and '2016-4-15 23:59:59' then '4-2'
+			when c.calldate between '2016-4-18' and '2016-4-22 23:59:59' then '4-3'
+		else '其他' end
+
